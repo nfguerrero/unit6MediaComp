@@ -120,7 +120,7 @@ public class PictureTester
   public static void testCollage()
   {
     Picture canvas = new Picture("640x480.jpg");
-    canvas.createCollage();
+    //canvas.createCollage();
     canvas.explore();
   }
   
@@ -132,6 +132,16 @@ public class PictureTester
     swan.explore();
   }
   
+  /** Method to test cropAndCopy */
+  public static void testCropAndCopy()
+  {
+      Picture pic1 = new Picture("seagull.jpg");
+      Picture pic2 = new Picture(486, 648);
+      pic1.explore();
+      pic2.cropAndCopy(pic1, 233, 318, 238, 344, 0, 0);
+      pic2.explore();
+  }
+  
   /** Main method for testing.  Every class can have a main
     * method in Java */
   public static void main(String[] args)
@@ -139,12 +149,13 @@ public class PictureTester
     // uncomment a call here to run a test
     // and comment out the ones you don't want
     // to run
+    testCropAndCopy();
     //testZeroBlue();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
     //testNegate();
-    testGrayscale();
+    //testGrayscale();
     //testFixUnderwater();
     //testMirrorVertical();
     //testMirrorVerticalRightToLeft();
