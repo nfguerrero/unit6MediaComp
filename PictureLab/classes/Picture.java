@@ -342,14 +342,50 @@ public class Picture extends SimplePicture
       }
     }   
   }
+  
+  /** Method to reverse image horizontally */
+  public void reverseHorizontal()
+  {
+      Pixel[][] oldPixels = this.getPixels2D();
+      Pixel[][] newPixels = new Pixel[oldPixels.length][oldPixels[0].length];
+      
+      for (int row = 0; row < pixels.length; row++)
+      {
+          for (int col = 0; col < pixels[0].length; col++)
+          {
+              newPixels[row][col] = oldPixels[row][col];
+          }
+      }
+      
+      for (int row = 0; row < pixels.length; row++)
+      {
+          for (int col = 0; col < pixels[0].length; col++)
+          {
+              oldPixels[row][oldPixels[0].length-col-1] = newPixels[row][col];
+          }
+      }
+  }
 
   /** Method to create a collage of several pictures */
   public void createCollage()
   {
-    Picture pic1 = new Picture("Jumping_Lamb.jpg");
-    Picture pic2 = new Picture("Jumping_Lamb.jpg");
-    this.copy(pic1,0,0);
-    this.copy(pic2,0,460);
+    Picture sourcePic = new Picture("JumpingLamb.jpg");
+    this.copy(sourcePic,0,0);
+    Pixel[][] picPixels = sourcePic.getPixels2D();
+    
+    Pixel[][] pixels = this.getPixels2D();
+    int colMid = pixels.length - picPixels.length;
+    int rowMid = pixels[0].length - picPixels[0].length;
+    
+    for (int row = 0; row < picPixels.length; row++)
+    {
+        for (int col = 0; col < picPixels[0].length; col++)
+        {
+            pixels[row][pixels[0].length-col-1].setColor(picPixels[row][col].getColor());
+            pixels[pixels.length-row-1][col].setColor(picPixels[row][col].getColor());
+            pixels[pixels.length-row-1][pixels[0].length-col-1].setColor(picPixels[row][col].getColor());
+        }
+    }
   }
   
   
