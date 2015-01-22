@@ -344,28 +344,90 @@ public class Picture extends SimplePicture
   }
   
   /** Method to reverse image horizontally */
-  public void reverseHorizontal()
+  public void reverseHorizontal(Picture pic)
   {
       Pixel[][] oldPixels = this.getPixels2D();
-      Pixel[][] newPixels = new Pixel[oldPixels.length][oldPixels[0].length];
-      
-      for (int row = 0; row < pixels.length; row++)
+      Pixel[][] newPixels = pic.getPixels2D();
+
+      for (int row = 0; row < oldPixels.length; row++)
       {
-          for (int col = 0; col < pixels[0].length; col++)
+          for (int col = 0; col < oldPixels[0].length; col++)
           {
-              newPixels[row][col] = oldPixels[row][col];
-          }
-      }
-      
-      for (int row = 0; row < pixels.length; row++)
-      {
-          for (int col = 0; col < pixels[0].length; col++)
-          {
-              oldPixels[row][oldPixels[0].length-col-1] = newPixels[row][col];
+              oldPixels[row][oldPixels[0].length-col-1].setColor(newPixels[row][col].getColor());
           }
       }
   }
+  
+  /** Method to reverse image vertically */
+  public void reverseVertical(Picture pic)
+  {
+      Pixel[][] oldPixels = this.getPixels2D();
+      Pixel[][] newPixels = pic.getPixels2D();
 
+      for (int row = 0; row < oldPixels.length; row++)
+      {
+          for (int col = 0; col < oldPixels[0].length; col++)
+          {
+              oldPixels[oldPixels.length-row-1][col].setColor(newPixels[row][col].getColor());
+          }
+      }
+  }
+  
+  /** Method to make two headed lamb */
+  public void twoHead()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      for (int row = 7; row < 167; row++)
+      {
+          int colCount = 0;
+          for (int col = 157; col < 256; col++)
+          {
+              pixels[row][157-colCount].setColor(pixels[row][col].getColor());
+              colCount++;
+          }
+      }
+  }
+  
+  /** Method to make each pixel randomly zero in either r, g, or b */
+  public void randomZero()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      for (int row = 0; row < pixels.length; row++)
+      {
+          for (int col = 0; col < pixels[0].length; col++)
+          {
+              double rand = Math.random()*3;
+              if (rand < 1)
+              {
+                  pixels[row][col].setRed(0);
+              }
+              else if (rand < 2)
+              {
+                  pixels[row][col].setGreen(0);
+              }
+              else
+              {
+                  pixels[row][col].setBlue(0);
+              }
+          }
+      }
+  }
+  
+  /**Method to create a gradient blue */
+  public void gradientBlue()
+  {
+      Pixel[][] pixels = this.getPixels2D();
+      for (int row = 0; row < pixels.length; row++)
+      {
+          double count = 0;
+          for (int col = 0; col < pixels[0].length; col++)
+          {
+              pixels[row][col].setBlue((int)(255*(count/pixels[0].length)));
+              count++;
+          }
+      }
+  }
+  
   /** Method to create a collage of several pictures */
   public void createCollage()
   {
@@ -373,19 +435,34 @@ public class Picture extends SimplePicture
     this.copy(sourcePic,0,0);
     Pixel[][] picPixels = sourcePic.getPixels2D();
     
-    Pixel[][] pixels = this.getPixels2D();
-    int colMid = pixels.length - picPixels.length;
-    int rowMid = pixels[0].length - picPixels[0].length;
+    Picture picture = new Picture("JumpingLamb.jpg");
+    picture.reverseVertical(sourcePic);
+    picture.gradientBlue();
+    this.copy(picture,276,0);
     
-    for (int row = 0; row < picPixels.length; row++)
-    {
-        for (int col = 0; col < picPixels[0].length; col++)
-        {
-            pixels[row][pixels[0].length-col-1].setColor(picPixels[row][col].getColor());
-            pixels[pixels.length-row-1][col].setColor(picPixels[row][col].getColor());
-            pixels[pixels.length-row-1][pixels[0].length-col-1].setColor(picPixels[row][col].getColor());
-        }
-    }
+    Picture test1 = new Picture("JumpingLamb.jpg");
+    Picture test2 = new Picture("JumpingLamb.jpg");
+    test2.reverseHorizontal(test1);
+    
+    Picture pic1 = new Picture("JumpingLamb.jpg");
+    pic1.mirrorVerticalRightToLeft();
+    pic1.mirrorHorizontal();
+    this.copy(pic1,0,460);
+    
+    Picture pic2 = new Picture("JumpingLamb.jpg");
+    pic2.reverseHorizontal(test1);
+    pic2.twoHead();
+    this.copy(pic2,0,920);
+    
+    Picture pic3 = new Picture("JumpingLamb.jpg");
+    pic3.reverseVertical(test1);
+    pic3.mirrorVerticalRightToLeft();
+    this.copy(pic3,276,460);
+    
+    Picture pic4 = new Picture("JumpingLamb.jpg");
+    pic4.reverseVertical(test2);
+    pic4.randomZero();
+    this.copy(pic4,276,920);
   }
   
   
